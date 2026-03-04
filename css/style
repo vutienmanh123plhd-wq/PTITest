@@ -1,0 +1,31 @@
+:root {
+    --ptit-red: #990000; /* Màu đỏ đặc trưng PTIT */
+    --ptit-red-dark: #7a0000;
+    --light-gray: #f4f4f4;
+    --text-color: #333;
+    --white: #ffffff;
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body { background-color: var(--light-gray); color: var(--text-color); }
+
+.container { width: 90%; max-width: 1200px; margin: auto; }
+
+/* Button PTIT Style */
+.btn {
+    padding: 10px 20px; border: none; border-radius: 5px;
+    cursor: pointer; font-weight: bold; transition: 0.3s;
+}
+.btn-primary { background: var(--ptit-red); color: white; }
+.btn-primary:hover { background: var(--ptit-red-dark); }
+
+/* Card Style */
+.card {
+    background: var(--white); border-radius: 8px;
+    padding: 20px; box-shadow: var(--shadow);
+}
