@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" href="data:,">
+    <title>Danh Sách Kỳ Thi - PTIT Exam System</title>
+</head>
+<body class="user-dashboard">
+    <div class="user-container">
+        <!-- Header -->
+        <header class="user-header">
+            <div class="header-left">
+                <img src="../images/ptit-logo.png" alt="PTIT Logo" class="header-logo">
+                <h1>PTIT Exam</h1>
+            </div>
+            <nav class="header-nav">
+                <input type="text" id="searchExam" placeholder="Tìm kiếm kỳ thi...">
+                <div class="user-menu">
+                    <span id="userName">Sinh viên</span>
+                    <button id="logoutBtn" class="btn btn-sm btn-logout">Đăng xuất</button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="user-main">
+            <div class="exams-section">
+                <h2>Danh Sách Kỳ Thi</h2>
+                
+                <div class="filter-tabs">
+                    <button class="tab-btn active" data-filter="all">Tất Cả</button>
+                    <button class="tab-btn" data-filter="available">Đang Mở</button>
+                    <button class="tab-btn" data-filter="closed">Đã Đóng</button>
+                </div>
+
+                <div id="examList" class="exams-grid">
+                    <!-- Exams will be loaded here -->
+                    <div class="exam-card">
+                        <div class="exam-header">
+                            <h3>Thi Giữa Kỳ - Lập trình Web</h3>
+                            <span class="badge badge-success">Đang mở</span>
+                        </div>
+                        <div class="exam-body">
+                            <p><strong>Mô tả:</strong> Kiểm tra kiến thức lập trình Web</p>
+                            <p><strong>Số câu:</strong> 20 câu hỏi</p>
+                            <p><strong>Thời gian:</strong> 45 phút</p>
+                            <p><strong>Điểm tối đa:</strong> 10 điểm</p>
+                        </div>
+                        <div class="exam-footer">
+                            <button class="btn btn-primary" onclick="startExam(1)">Vào thi</button>
+                            <button class="btn btn-secondary">Xem chi tiết</button>
+                        </div>
+                    </div>
+
+                    <div class="exam-card">
+                        <div class="exam-header">
+                            <h3>Thi Luyện Tập - Database</h3>
+                            <span class="badge badge-success">Đang mở</span>
+                        </div>
+                        <div class="exam-body">
+                            <p><strong>Mô tả:</strong> Luyện tập cơ sở dữ liệu</p>
+                            <p><strong>Số câu:</strong> 30 câu hỏi</p>
+                            <p><strong>Thời gian:</strong> 60 phút</p>
+                            <p><strong>Điểm tối đa:</strong> 10 điểm</p>
+                        </div>
+                        <div class="exam-footer">
+                            <button class="btn btn-primary" onclick="startExam(2)">Vào thi</button>
+                            <button class="btn btn-secondary">Xem chi tiết</button>
+                        </div>
+                    </div>
+
+                    <div class="exam-card">
+                        <div class="exam-header">
+                            <h3>Thi Cuối Kỳ - Lập Trình Hướng Đối Tượng</h3>
+                            <span class="badge badge-warning">Sắp diễn ra</span>
+                        </div>
+                        <div class="exam-body">
+                            <p><strong>Mô tả:</strong> Kiểm tra OOP</p>
+                            <p><strong>Số câu:</strong> 25 câu hỏi</p>
+                            <p><strong>Thời gian:</strong> 90 phút</p>
+                            <p><strong>Điểm tối đa:</strong> 10 điểm</p>
+                        </div>
+                        <div class="exam-footer">
+                            <button class="btn btn-primary" disabled>Sắp diễn ra</button>
+                            <button class="btn btn-secondary">Xem chi tiết</button>
+                        </div>
+                    </div>
+
+                    <div class="exam-card">
+                        <div class="exam-header">
+                            <h3>Thi Kiểm Tra - Mạng Máy Tính</h3>
+                            <span class="badge badge-danger">Đã đóng</span>
+                        </div>
+                        <div class="exam-body">
+                            <p><strong>Mô tả:</strong> Kiểm tra mạng máy tính</p>
+                            <p><strong>Số câu:</strong> 15 câu hỏi</p>
+                            <p><strong>Thời gian:</strong> 30 phút</p>
+                            <p><strong>Điểm tối đa:</strong> 10 điểm</p>
+                        </div>
+                        <div class="exam-footer">
+                            <button class="btn btn-primary" disabled>Đã đóng</button>
+                            <button class="btn btn-secondary" onclick="viewResult(4)">Xem kết quả</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Results -->
+            <div class="results-preview">
+                <h2>Kết Quả Gần Đây</h2>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Kỳ Thi</th>
+                            <th>Điểm</th>
+                            <th>Câu Đúng</th>
+                            <th>Thời Gian</th>
+                            <th>Ngày Tham Gia</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Thi Kiểm Tra - Mạng Máy Tính</td>
+                            <td><strong>8.5</strong></td>
+                            <td>13/15</td>
+                            <td>28 phút</td>
+                            <td>2026-03-02</td>
+                            <td><button class="btn btn-sm btn-primary">Chi tiết</button></td>
+                        </tr>
+                        <tr>
+                            <td>Thi Luyện Tập - Database</td>
+                            <td><strong>7.8</strong></td>
+                            <td>23/30</td>
+                            <td>55 phút</td>
+                            <td>2026-02-28</td>
+                            <td><button class="btn btn-sm btn-primary">Chi tiết</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/validation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userSession = localStorage.getItem('userSession');
+            if (!userSession) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = JSON.parse(userSession);
+            document.getElementById('userName').textContent = user.username;
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Bạn chắc chắn muốn đăng xuất?')) {
+                localStorage.removeItem('userSession');
+                window.location.href = 'login.html';
+            }
+        });
+
+        document.getElementById('searchExam').addEventListener('input', function() {
+            const term = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.exam-card');
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                card.style.display = title.includes(term) ? '' : 'none';
+            });
+        });
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.getAttribute('data-filter');
+                filterExams(filter);
+            });
+        });
+
+        function filterExams(filter) {
+            const cards = document.querySelectorAll('.exam-card');
+            cards.forEach(card => {
+                const badge = card.querySelector('.badge');
+                let show = true;
+                if (filter === 'available') {
+                    show = badge.classList.contains('badge-success');
+                } else if (filter === 'closed') {
+                    show = badge.classList.contains('badge-danger');
+                }
+                card.style.display = show ? '' : 'none';
+            });
+        }
+
+        function startExam(examId) {
+            alert('Vào thi kỳ thi #' + examId);
+        }
+
+        function viewResult(resultId) {
+            alert('Xem kết quả #' + resultId);
+        }
+    </script>
+</body>
+</html>
