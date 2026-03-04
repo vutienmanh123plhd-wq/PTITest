@@ -12,9 +12,18 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body { background-color: var(--light-gray); color: var(--text-color); }
+body { 
+    background-color: var(--light-gray); 
+    color: var(--text-color);
+    min-height: 100vh;
+}
 
-.container { width: 90%; max-width: 1200px; margin: auto; }
+.container { 
+    width: 90%; 
+    max-width: 1200px; 
+    margin: auto;
+    padding: 20px;
+}
 
 /* Button PTIT Style */
 .btn {
@@ -26,6 +35,40 @@ body { background-color: var(--light-gray); color: var(--text-color); }
 
 /* Card Style */
 .card {
-    background: var(--white); border-radius: 8px;
-    padding: 20px; box-shadow: var(--shadow);
+    background: var(--white); 
+    border-radius: 8px;
+    padding: 20px; 
+    box-shadow: var(--shadow);
+    border: 1px solid #ddd;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card h4 {
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.card p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+header h2 {
+    font-size: 24px;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+nav input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 250px;
 }
