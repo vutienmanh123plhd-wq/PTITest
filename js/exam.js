@@ -323,27 +323,54 @@ function calculateResults() {
         score: Math.round(score * 100) / 100
     };
 }
-        window.location.href = 'results.html?examId=' + currentExamId;
+    
+    // Calculate results
+    const results = calculateResults();
+    
+    // Store exam results
+    const examResults = {
+        examId: currentExamId,
+        examTitle: examData.title,
+        totalQuestions: examData.questions.length,
+        correctAnswers: results.correctCount,
+        userAnswers: userAnswers,
+        score: results.score,
+        percentage: results.percentage,
+        timeUsed: examData.duration * 60,
+        submittedAt: new Date().toISOString(),
+        timedOut: true
+    };
+
+    // Store in localStorage
+    let allResults = JSON.parse(localStorage.getItem('examResults')) || [];
+    allResults.push(examResults);
+    localStorage.setItem('examResults', JSON.stringify(allResults));
+    localStorage.setItem('lastExamResult', JSON.stringify(examResults));
+
+    // Redirect to results page
+    setTimeout(() => {
+        window.location.href = 'results.html';
     }, 1000);
 }
 
 function calculateResults() {
     let correctCount = 0;
-
+    
     examData.questions.forEach(question => {
-        if (userAnswers[question.id] === question.correctAnswer) {
+        const userAnswer = userAnswers[question.id];
+        if (userAnswer === question.correctAnswer) {
             correctCount++;
         }
     });
-
+    
     const totalQuestions = examData.questions.length;
     const percentage = (correctCount / totalQuestions) * 100;
-    const score = (correctCount / totalQuestions) * examData.totalScore;
-
+    const score = (percentage / 100) * examData.totalScore;
+    
     return {
         correctCount: correctCount,
         totalQuestions: totalQuestions,
-        percentage: percentage,
-        score: score.toFixed(2)
+        percentage: Math.round(percentage),
+        score: Math.round(score * 100) / 100
     };
 }
