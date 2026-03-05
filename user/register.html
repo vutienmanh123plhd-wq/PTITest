@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" href="data:,">
+    <title>Đăng Ký - PTIT Exam System</title>
+    <style>
+        .form-group-inline {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .form-group-inline {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .password-strength {
+            margin-top: 5px;
+            font-size: 12px;
+            height: 4px;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .strength-weak {
+            background-color: #ff6b6b;
+            width: 33%;
+        }
+        
+        .strength-fair {
+            background-color: #ffd93d;
+            width: 66%;
+        }
+        
+        .strength-good {
+            background-color: #6bcf7f;
+            width: 100%;
+        }
+        
+        .password-hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+        
+        .form-group.required label::after {
+            content: " *";
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <img src="../images/ptit-logo.png" alt="PTIT Logo" class="login-logo">
+                <h1>PTIT Exam</h1>
+                <p>Đăng ký tài khoản sinh viên</p>
+            </div>
+
+            <form id="registerForm" class="login-form">
+                <!-- Username -->
+                <div class="form-group required">
+                    <label for="registerUsername">Tên người dùng</label>
+                    <input type="text" id="registerUsername" name="username" placeholder="Tên đăng nhập (3-20 ký tự)" required>
+                    <span class="error-message" id="registerUsernameError"></span>
+                    <div class="password-hint" style="color: #090; margin-top: 3px;">Tối thiểu 3 ký tự, chỉ chứa chữ, số và _</div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group required">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" name="email" placeholder="example@ptit.edu.vn" required>
+                    <span class="error-message" id="registerEmailError"></span>
+                </div>
+
+                <!-- Password & Confirm Password -->
+                <div class="form-group-inline">
+                    <div class="form-group required">
+                        <label for="registerPassword">Mật khẩu</label>
+                        <input type="password" id="registerPassword" name="password" placeholder="Mật khẩu mạnh" required>
+                        <span class="error-message" id="registerPasswordError"></span>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <div class="password-hint">
+                            • Tối thiểu 6 ký tự<br>
+                            • Nên có chữ hoa, chữ thường, số
+                        </div>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="registerConfirmPassword">Xác nhận mật khẩu</label>
+                        <input type="password" id="registerConfirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                        <span class="error-message" id="registerConfirmPasswordError"></span>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group" style="display: flex; align-items: flex-start; gap: 10px;">
+                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                    <label for="agreeTerms" style="margin-top: 2px; font-size: 13px;">
+                        Tôi đồng ý với <a href="#" style="color: #0066cc; text-decoration: none;">điều khoản dịch vụ</a> 
+                        và <a href="#" style="color: #0066cc; text-decoration: none;">chính sách bảo mật</a>
+                    </label>
+                </div>
+                <span class="error-message" id="registerTermsError"></span>
+
+                <button type="submit" class="btn btn-login">Đăng Ký</button>
+            </form>
+
+            <div id="registerMessage" class="login-message"></div>
+
+            <div class="auth-links">
+                <p>Đã có tài khoản? <a href="login.html">Đăng nhập tại đây</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/validation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            const passwordInput = document.getElementById('registerPassword');
+            const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+            
+            // Show password strength indicator
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    const strength = calculatePasswordStrength(this.value);
+                    updatePasswordStrengthBar(passwordStrengthBar, strength);
+                });
+            }
+            
+            // Form submission
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleRegisterSubmit();
+                });
+            }
+        });
+
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            if (strength <= 2) return 'weak';
+            if (strength <= 3) return 'fair';
+            return 'good';
+        }
+
+        function updatePasswordStrengthBar(bar, strength) {
+            bar.className = 'password-strength-bar';
+            if (strength === 'weak') bar.classList.add('strength-weak');
+            else if (strength === 'fair') bar.classList.add('strength-fair');
+            else if (strength === 'good') bar.classList.add('strength-good');
+        }
+
+        function handleRegisterSubmit() {
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const confirmPassword = document.getElementById('registerConfirmPassword').value.trim();
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            const usernameError = document.getElementById('registerUsernameError');
+            const emailError = document.getElementById('registerEmailError');
+            const passwordError = document.getElementById('registerPasswordError');
+            const confirmPasswordError = document.getElementById('registerConfirmPasswordError');
+            const termsError = document.getElementById('registerTermsError');
+            const registerMessage = document.getElementById('registerMessage');
+            
+            // Reset errors
+            usernameError.textContent = '';
+            emailError.textContent = '';
+            passwordError.textContent = '';
+            confirmPasswordError.textContent = '';
+            termsError.textContent = '';
+            registerMessage.className = 'login-message';
+            
+            let isValid = true;
+            
+            // Validate username
+            if (!username) {
+                usernameError.textContent = 'Vui lòng nhập tên người dùng';
+                isValid = false;
+            } else if (!validateUsername(username)) {
+                usernameError.textContent = 'Tên người dùng phải có 3-20 ký tự (chữ, số, _)';
+                isValid = false;
+            }
+            
+            // Validate email
+            if (!email) {
+                emailError.textContent = 'Vui lòng nhập email';
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                emailError.textContent = 'Email không hợp lệ';
+                isValid = false;
+            }
+            
+            // Validate password
+            if (!password) {
+                passwordError.textContent = 'Vui lòng nhập mật khẩu';
+                isValid = false;
+            } else if (!validatePassword(password)) {
+                passwordError.textContent = 'Mật khẩu phải có ít nhất 6 ký tự';
+                isValid = false;
+            }
+            
+            // Validate confirm password
+            if (!confirmPassword) {
+                confirmPasswordError.textContent = 'Vui lòng xác nhận mật khẩu';
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                confirmPasswordError.textContent = 'Mật khẩu xác nhận không khớp';
+                isValid = false;
+            }
+            
+            // Validate terms
+            if (!agreeTerms) {
+                termsError.textContent = 'Vui lòng đồng ý với điều khoản dịch vụ';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Register success (demo - in real app, send to backend)
+            registerMessage.className = 'login-message success';
+            registerMessage.textContent = 'Đăng ký thành công! Chuyển hướng...';
+            
+            // Store new user (in real app, save to backend)
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            users.push({
+                username: username,
+                email: email,
+                password: password, // In real app, hash this!
+                registeredAt: new Date().toISOString()
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Redirect to login
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

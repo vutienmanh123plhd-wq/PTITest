@@ -1,6 +1,7 @@
 // ===== FORM VALIDATION =====
 function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // RFC 5322 simplified email validation
+    const re = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(email);
 }
 
@@ -9,7 +10,13 @@ function validatePassword(password) {
 }
 
 function validateUsername(username) {
-    return username.length >= 3;
+    // Username: 3-20 characters, only alphanumeric and underscore
+    const re = /^[a-zA-Z0-9_]{3,20}$/;
+    return re.test(username);
+}
+
+function validateConfirmPassword(password, confirmPassword) {
+    return password === confirmPassword && password.length >= 6;
 }
 
 // ===== LOGIN VALIDATION =====

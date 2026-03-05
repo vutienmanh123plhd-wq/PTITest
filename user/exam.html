@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" href="data:,">
+    <title>Làm Bài Thi - PTIT Exam System</title>
+    <style>
+        .exam-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .exam-main {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .exam-info {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .exam-info h1 {
+            color: var(--ptit-red);
+            margin-bottom: 10px;
+        }
+
+        .question-container {
+            margin-bottom: 40px;
+        }
+
+        .question-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: var(--ptit-red);
+            font-size: 16px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option-label:hover {
+            background: #f0f0f0;
+            border-color: var(--ptit-red);
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 15px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            color: var(--ptit-red);
+            font-weight: bold;
+        }
+
+        .option-label input[type="radio"]:checked ~ .option-label {
+            background: #ffe6e6;
+            border-color: var(--ptit-red);
+        }
+
+        .option-text {
+            font-size: 15px;
+            color: #333;
+        }
+
+        /* Sidebar */
+        .exam-sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .timer-section {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--ptit-red);
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer.warning {
+            color: #ff6b6b;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+
+        .question-nav {
+            margin-top: 20px;
+        }
+
+        .question-nav h4 {
+            margin-bottom: 10px;
+        }
+
+        .question-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .q-btn {
+            padding: 10px 5px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .q-btn:hover {
+            border-color: var(--ptit-red);
+        }
+
+        .q-btn.active {
+            background: var(--ptit-red);
+            color: white;
+            border-color: var(--ptit-red);
+        }
+
+        .q-btn.answered {
+            background: #6bcf7f;
+            color: white;
+            border-color: #6bcf7f;
+        }
+
+        .q-btn.unanswered {
+            background: #ffcccc;
+            border-color: #ff6b6b;
+        }
+
+        .stats {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .stats-item {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stats-answered {
+            color: #6bcf7f;
+        }
+
+        .stats-unanswered {
+            color: #ff6b6b;
+        }
+
+        .submit-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .submit-section p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--ptit-red);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--ptit-red-dark);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .nav-buttons button:hover:not(:disabled) {
+            border-color: var(--ptit-red);
+            color: var(--ptit-red);
+        }
+
+        .nav-buttons button:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .warning-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-modal.show {
+            display: flex;
+        }
+
+        .warning-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .warning-content h3 {
+            color: var(--ptit-red);
+            margin-bottom: 15px;
+        }
+
+        .warning-content p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .warning-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .warning-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm {
+            background: var(--ptit-red);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: var(--ptit-red-dark);
+        }
+
+        .btn-cancel {
+            background: #ddd;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #bbb;
+        }
+
+        @media (max-width: 1024px) {
+            .exam-container {
+                grid-template-columns: 1fr;
+            }
+
+            .exam-sidebar {
+                position: static;
+            }
+
+            .question-buttons {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .exam-container {
+                padding: 10px;
+            }
+
+            .exam-main {
+                padding: 15px;
+            }
+
+            .question-buttons {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .timer {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body class="exam-page">
+    <div class="exam-container">
+        <!-- Main Exam Content -->
+        <div class="exam-main">
+            <div class="exam-info">
+                <h1 id="examTitle">Bài Thi</h1>
+                <p id="examDesc" style="color: #666; margin-top: 5px;"></p>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div class="nav-buttons" style="justify-content: center; gap: 20px;">
+                <button id="prevBtn" class="btn btn-secondary" onclick="previousQuestion()">← Câu Trước</button>
+                <button id="nextBtn" class="btn btn-primary" onclick="nextQuestion()">Câu Tiếp →</button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="exam-sidebar">
+            <!-- Timer -->
+            <div class="timer-section">
+                <div style="font-size: 14px; margin-bottom: 5px;">THỜI GIAN CÒN LẠI</div>
+                <div class="timer" id="timerDisplay">45:00</div>
+                <div style="font-size: 12px; color: #666;">phút : giây</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stats-item">
+                    <span>Tổng câu:</span>
+                    <span id="totalQuestions">0</span>
+                </div>
+                <div class="stats-item stats-answered">
+                    <span>Đã trả lời:</span>
+                    <span id="answeredCount">0</span>
+                </div>
+                <div class="stats-item stats-unanswered">
+                    <span>Chưa trả lời:</span>
+                    <span id="unansweredCount">0</span>
+                </div>
+            </div>
+
+            <!-- Question Navigation -->
+            <div class="question-nav">
+                <h4>Điều Hướng Câu Hỏi</h4>
+                <div class="question-buttons" id="questionButtons"></div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <p><strong>⚠️ Lưu ý:</strong></p>
+                <p>Kiểm tra lại các câu trả lời trước khi nộp bài. Bạn không thể chỉnh sửa sau khi nộp!</p>
+                <button class="btn-submit" onclick="openSubmitWarning()">NỘP BÀI</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div class="warning-modal" id="submitWarning">
+        <div class="warning-content">
+            <h3>⚠️ XÁC NHẬN NỘP BÀI</h3>
+            <p>Bạn chắc chắn muốn nộp bài thi?</p>
+            <p id="warningStats"></p>
+            <p style="font-size: 14px; color: #666;">Bạn sẽ không thể quay lại sau khi nộp.</p>
+            <div class="warning-buttons">
+                <button class="btn-cancel" onclick="closeSubmitWarning()">Hủy</button>
+                <button class="btn-confirm" onclick="submitExam()">Nộp Bài</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-modal" id="timeoutWarning">
+        <div class="warning-content">
+            <h3>⏱️ HẾT GIỜ</h3>
+            <p>Thời gian làm bài của bạn đã hết!</p>
+            <p>Bài thi sẽ tự động nộp.</p>
+            <div class="warning-buttons">
+                <button class="btn-confirm" onclick="autoSubmitExam()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/exam-data.js"></script>
+    <script src="../js/exam.js"></script>
+</body>
+</html>

@@ -198,11 +198,22 @@
         }
 
         function startExam(examId) {
-            alert('Vào thi kỳ thi #' + examId);
+            if (confirm('Bạn sẽ bắt đầu làm bài thi. Bạn đã sẵn sàng?')) {
+                window.location.href = 'exam.html?id=' + examId;
+            }
         }
 
         function viewResult(resultId) {
-            alert('Xem kết quả #' + resultId);
+            // For demo purposes, we can view results from localStorage
+            const allResults = JSON.parse(localStorage.getItem('examResults')) || [];
+            const result = allResults.find(r => r.examId === resultId);
+            
+            if (result) {
+                localStorage.setItem('lastExamResult', JSON.stringify(result));
+                window.location.href = 'results.html?examId=' + resultId;
+            } else {
+                alert('Không tìm thấy kết quả bài thi này!');
+            }
         }
     </script>
 </body>
