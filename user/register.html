@@ -7,62 +7,6 @@
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="icon" href="data:,">
     <title>Đăng Ký - PTIT Exam System</title>
-    <style>
-        .form-group-inline {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        @media (max-width: 600px) {
-            .form-group-inline {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .password-strength {
-            margin-top: 5px;
-            font-size: 12px;
-            height: 4px;
-            background-color: #e0e0e0;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .password-strength-bar {
-            height: 100%;
-            width: 0%;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-        
-        .strength-weak {
-            background-color: #ff6b6b;
-            width: 33%;
-        }
-        
-        .strength-fair {
-            background-color: #ffd93d;
-            width: 66%;
-        }
-        
-        .strength-good {
-            background-color: #6bcf7f;
-            width: 100%;
-        }
-        
-        .password-hint {
-            font-size: 11px;
-            color: #666;
-            margin-top: 5px;
-            line-height: 1.4;
-        }
-        
-        .form-group.required label::after {
-            content: " *";
-            color: #ff6b6b;
-        }
-    </style>
 </head>
 <body class="auth-page">
     <div class="login-container">
@@ -75,56 +19,55 @@
 
             <form id="registerForm" class="login-form">
                 <!-- Username -->
-                <div class="form-group required">
-                    <label for="registerUsername">Tên người dùng</label>
-                    <input type="text" id="registerUsername" name="username" placeholder="Tên đăng nhập (3-20 ký tự)" required>
+                <div class="form-group">
+                    <label for="registerUsername">Tên người dùng <span style="color: #ff6b6b;">*</span></label>
+                    <input type="text" id="registerUsername" placeholder="3-20 ký tự (chữ, số, _)" required>
                     <span class="error-message" id="registerUsernameError"></span>
-                    <div class="password-hint" style="color: #090; margin-top: 3px;">Tối thiểu 3 ký tự, chỉ chứa chữ, số và _</div>
                 </div>
 
                 <!-- Email -->
-                <div class="form-group required">
-                    <label for="registerEmail">Email</label>
-                    <input type="email" id="registerEmail" name="email" placeholder="example@ptit.edu.vn" required>
+                <div class="form-group">
+                    <label for="registerEmail">Email <span style="color: #ff6b6b;">*</span></label>
+                    <input type="email" id="registerEmail" placeholder="example@ptit.edu.vn" required>
                     <span class="error-message" id="registerEmailError"></span>
                 </div>
 
-                <!-- Password & Confirm Password -->
-                <div class="form-group-inline">
-                    <div class="form-group required">
-                        <label for="registerPassword">Mật khẩu</label>
-                        <input type="password" id="registerPassword" name="password" placeholder="Mật khẩu mạnh" required>
-                        <span class="error-message" id="registerPasswordError"></span>
-                        <div class="password-strength">
-                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
-                        </div>
-                        <div class="password-hint">
-                            • Tối thiểu 6 ký tự<br>
-                            • Nên có chữ hoa, chữ thường, số
-                        </div>
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="registerPassword">Mật khẩu <span style="color: #ff6b6b;">*</span></label>
+                    <input type="password" id="registerPassword" placeholder="Tối thiểu 6 ký tự" required>
+                    <span class="error-message" id="registerPasswordError"></span>
+                    <div style="margin-top: 5px; font-size: 11px; color: #666;">
+                        Password Strength: <span id="strengthText">-</span>
                     </div>
+                    <div style="margin-top: 5px; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
+                        <div id="strengthBar" style="height: 100%; width: 0%; background: #ff6b6b; transition: all 0.3s;"></div>
+                    </div>
+                </div>
 
-                    <div class="form-group required">
-                        <label for="registerConfirmPassword">Xác nhận mật khẩu</label>
-                        <input type="password" id="registerConfirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu" required>
-                        <span class="error-message" id="registerConfirmPasswordError"></span>
-                    </div>
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Xác nhận mật khẩu <span style="color: #ff6b6b;">*</span></label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Nhập lại mật khẩu" required>
+                    <span class="error-message" id="registerConfirmPasswordError"></span>
                 </div>
 
                 <!-- Terms -->
-                <div class="form-group" style="display: flex; align-items: flex-start; gap: 10px;">
-                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
-                    <label for="agreeTerms" style="margin-top: 2px; font-size: 13px;">
-                        Tôi đồng ý với <a href="#" style="color: #0066cc; text-decoration: none;">điều khoản dịch vụ</a> 
-                        và <a href="#" style="color: #0066cc; text-decoration: none;">chính sách bảo mật</a>
-                    </label>
+                <div class="form-group">
+                    <div style="display: flex; align-items: flex-start; gap: 10px; margin: 15px 0;">
+                        <input type="checkbox" id="agreeTerms" style="margin-top: 3px;" required>
+                        <label for="agreeTerms" style="font-size: 13px; font-weight: normal; margin: 0;">
+                            Tôi đồng ý với <a href="#" style="color: #0066cc;">điều khoản dịch vụ</a> 
+                            và <a href="#" style="color: #0066cc;">chính sách bảo mật</a>
+                        </label>
+                    </div>
+                    <span class="error-message" id="registerTermsError"></span>
                 </div>
-                <span class="error-message" id="registerTermsError"></span>
 
                 <button type="submit" class="btn btn-login">Đăng Ký</button>
             </form>
 
-            <div id="registerMessage" class="login-message"></div>
+            <div id="registerMessage" class="login-message" style="display: none;"></div>
 
             <div class="auth-links">
                 <p>Đã có tài khoản? <a href="login.html">Đăng nhập tại đây</a></p>
@@ -137,17 +80,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             const registerForm = document.getElementById('registerForm');
             const passwordInput = document.getElementById('registerPassword');
-            const passwordStrengthBar = document.getElementById('passwordStrengthBar');
             
-            // Show password strength indicator
             if (passwordInput) {
                 passwordInput.addEventListener('input', function() {
-                    const strength = calculatePasswordStrength(this.value);
-                    updatePasswordStrengthBar(passwordStrengthBar, strength);
+                    updatePasswordStrength(this.value);
                 });
             }
             
-            // Form submission
             if (registerForm) {
                 registerForm.addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -156,8 +95,10 @@
             }
         });
 
-        function calculatePasswordStrength(password) {
+        function updatePasswordStrength(password) {
             let strength = 0;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
             
             if (password.length >= 6) strength++;
             if (password.length >= 8) strength++;
@@ -165,16 +106,27 @@
             if (/\d/.test(password)) strength++;
             if (/[^a-zA-Z0-9]/.test(password)) strength++;
             
-            if (strength <= 2) return 'weak';
-            if (strength <= 3) return 'fair';
-            return 'good';
-        }
-
-        function updatePasswordStrengthBar(bar, strength) {
-            bar.className = 'password-strength-bar';
-            if (strength === 'weak') bar.classList.add('strength-weak');
-            else if (strength === 'fair') bar.classList.add('strength-fair');
-            else if (strength === 'good') bar.classList.add('strength-good');
+            let barColor = '#ff6b6b';
+            let barWidth = '0%';
+            let text = '-';
+            
+            if (strength <= 2) {
+                barColor = '#ff6b6b';
+                barWidth = '33%';
+                text = 'Weak';
+            } else if (strength <= 3) {
+                barColor = '#ffd93d';
+                barWidth = '66%';
+                text = 'Fair';
+            } else {
+                barColor = '#6bcf7f';
+                barWidth = '100%';
+                text = 'Good';
+            }
+            
+            strengthBar.style.backgroundColor = barColor;
+            strengthBar.style.width = barWidth;
+            strengthText.textContent = text;
         }
 
         function handleRegisterSubmit() {
@@ -197,7 +149,7 @@
             passwordError.textContent = '';
             confirmPasswordError.textContent = '';
             termsError.textContent = '';
-            registerMessage.className = 'login-message';
+            registerMessage.style.display = 'none';
             
             let isValid = true;
             
@@ -245,16 +197,17 @@
             
             if (!isValid) return;
             
-            // Register success (demo - in real app, send to backend)
+            // Register success
+            registerMessage.style.display = 'flex';
             registerMessage.className = 'login-message success';
             registerMessage.textContent = 'Đăng ký thành công! Chuyển hướng...';
             
-            // Store new user (in real app, save to backend)
+            // Store new user
             const users = JSON.parse(localStorage.getItem('users') || '[]');
             users.push({
                 username: username,
                 email: email,
-                password: password, // In real app, hash this!
+                password: password,
                 registeredAt: new Date().toISOString()
             });
             localStorage.setItem('users', JSON.stringify(users));
