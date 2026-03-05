@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (registerLink) {
         registerLink.addEventListener('click', function(e) {
             e.preventDefault();
-            alert('Trang đăng ký sẽ được cập nhật sớm!');
+            window.location.href = 'user/register.html';
         });
     }
 });

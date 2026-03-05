@@ -79,7 +79,7 @@ function initializeLogout() {
         logoutBtn.addEventListener('click', function() {
             if (confirm('Bạn chắc chắn muốn đăng xuất?')) {
                 localStorage.removeItem('adminSession');
-                window.location.href = 'login.html';
+                window.location.href = '../index.html';
             }
         });
     }
