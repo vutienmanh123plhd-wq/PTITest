@@ -471,7 +471,7 @@ nav input {
     padding: 12px;
     text-align: left;
     font-weight: bold;
-    color: var(--ptit-red);
+    color: #f8f9fa;
 }
 
 .results-table td {
