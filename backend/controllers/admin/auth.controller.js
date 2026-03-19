@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { pool } = require('../config/database');
+const { pool } = require('../../config/database');
 
 class AdminAuthController {
   static async login(req, res, next) {
