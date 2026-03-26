@@ -36,7 +36,7 @@ class AdminStatisticsController {
           total_users: userCount[0].count,
           total_exams: examCount[0].count,
           total_submissions: submissionCount[0].count,
-          average_score: avgScore[0].avg_score ? parseFloat(avgScore[0].avg_score.toFixed(2)) : 0,
+          average_score: avgScore[0].avg_score ? parseFloat(Number(avgScore[0].avg_score).toFixed(2)) : 0,
           recent_submissions: recentSubmissions
         }
       });
@@ -102,7 +102,7 @@ class AdminStatisticsController {
         exam_id: stat.exam_id,
         exam_name: stat.exam_name,
         total_participants: stat.total_participants,
-        average_score: stat.average_score ? parseFloat(stat.average_score.toFixed(2)) : 0,
+        average_score: stat.average_score ? parseFloat(Number(stat.average_score).toFixed(2)) : 0,
         completion_rate: 100
       }));
 
@@ -111,7 +111,7 @@ class AdminStatisticsController {
         data: {
           total_submissions: total,
           completion_rate: completionRate,
-          average_score: parseFloat(avgScore.toFixed(2)),
+          average_score: parseFloat(Number(avgScore).toFixed(2)),
           score_distribution: distribution,
           exam_statistics: examStatistics
         }

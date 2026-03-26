@@ -62,14 +62,16 @@ const validationSchemas = {
     username: Joi.string().alphanum().min(3).max(100).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
-    full_name: Joi.string().max(100).required()
+    full_name: Joi.string().max(100).required(),
+    role: Joi.string().valid('student', 'admin').default('student')
   }),
 
   updateUser: Joi.object({
     username: Joi.string().alphanum().min(3).max(100),
     email: Joi.string().email(),
     full_name: Joi.string().max(100),
-    password: Joi.string().min(6)
+    password: Joi.string().min(6),
+    role: Joi.string().valid('student', 'admin')
   })
 };
 

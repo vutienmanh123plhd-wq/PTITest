@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config();
+console.log("Kiểm tra JWT Secret từ file env:", process.env.JWT_SECRET);
 
 const authRoutes = require('./routes/auth.routes');
 const examRoutes = require('./routes/exam.routes');
@@ -14,7 +15,7 @@ const adminStatisticsRoutes = require('./routes/admin/statistics.routes');
 const adminResultRoutes = require('./routes/admin/result.routes');
 
 const errorHandler = require('./middleware/errorHandler');
-
+const { initializeDatabase } = require('./config/database');
 const app = express();
 
 // Security Middleware
@@ -64,9 +65,16 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
-});
+initializeDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Không thể khởi tạo Database. Server không thể chạy:', err);
+    process.exit(1); 
+  });
 
 module.exports = app;

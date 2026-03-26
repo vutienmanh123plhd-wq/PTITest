@@ -45,7 +45,7 @@ class AdminUserController {
 
   static async createUser(req, res, next) {
     try {
-      const { username, email, password, full_name } = req.body;
+      const { username, email, password, full_name, role = 'student' } = req.body;
 
       // Check if user exists
       const [existingUser] = await pool.query(
@@ -67,7 +67,7 @@ class AdminUserController {
       // Create user
       const [result] = await pool.query(
         'INSERT INTO users (username, email, password, full_name, role) VALUES (?, ?, ?, ?, ?)',
-        [username, email, hashedPassword, full_name, 'student']
+        [username, email, hashedPassword, full_name, role]
       );
 
       res.status(201).json({
@@ -77,7 +77,7 @@ class AdminUserController {
           username,
           email,
           full_name,
-          role: 'student'
+          role
         }
       });
     } catch (error) {
@@ -88,7 +88,7 @@ class AdminUserController {
   static async updateUser(req, res, next) {
     try {
       const { id } = req.params;
-      const { username, email, full_name, password } = req.body;
+      const { username, email, full_name, password, role } = req.body;
 
       // Check if user exists
       const [users] = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
@@ -106,6 +106,7 @@ class AdminUserController {
       if (username) updateFields.push('username = ?'), updateValues.push(username);
       if (email) updateFields.push('email = ?'), updateValues.push(email);
       if (full_name) updateFields.push('full_name = ?'), updateValues.push(full_name);
+      if (role) updateFields.push('role = ?'), updateValues.push(role);
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 10);
         updateFields.push('password = ?');
